@@ -63,9 +63,24 @@ const testimonials = [
 
 document.addEventListener('DOMContentLoaded', () => {
     renderDestinations();
+    renderDestinationsCarousel();
     renderDestinationOptions();
     renderTestimonials();
     initBookingForm();
+// Render the carousel in the Hidden Destinations section
+function renderDestinationsCarousel() {
+    const carouselInner = document.getElementById('destinationsCarouselInner');
+    if (!carouselInner) return;
+    carouselInner.innerHTML = destinations.map((dest, idx) => `
+        <div class="carousel-item${idx === 0 ? ' active' : ''}">
+            <img src="${dest.images[0]}" class="d-block w-100" alt="${dest.name}" style="max-height:400px;object-fit:cover;">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                <h5 class="fw-bold">${dest.name}</h5>
+                <p class="small">${dest.description}</p>
+            </div>
+        </div>
+    `).join('');
+}
 });
 
 function renderDestinations() {
@@ -132,12 +147,20 @@ function initBookingForm() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
+        const nameInput = document.getElementById('name');
+        const nameValue = nameInput.value.trim();
+      
+        if (!/^[A-Za-z]+$/.test(nameValue)) {
+            alert('Name must contain only letters (no numbers or spaces).');
+            nameInput.focus();
+            return;
+        }
         btn.disabled = true;
         btn.textContent = 'Sending...';
 
         const data = {
             access_key: '8dab817d-0918-455c-8086-c3ce73df55bb',
-            name: document.getElementById('name').value,
+            name: nameValue,
             email: document.getElementById('email').value,
             date: document.getElementById('date').value,
             people: document.getElementById('people').value,
