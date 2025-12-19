@@ -177,7 +177,9 @@ function initBookingForm() {
         .then(res => {
             if (res.success) {
                 document.getElementById('bookingSuccess').classList.remove('d-none');
-                form.reset();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500); 
             } else {
                 alert("Submission failed. Please try again.");
             }
